@@ -15,17 +15,16 @@ import json
 import time
 import os
 from arcgis.gis import GIS
-from src.config import DIR_PATH
 import urllib3 # https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
 
 # --- CONFIG ---
-OUTPUT_PATH = os.path.join(DIR_PATH["LOGS"],r'agol_item_jsons.jsonl')
+OUTPUT_PATH = os.path.join([PATH_TO_AGOL_DEPENDENCY_JSON_DIR],r'agol_item_jsons.jsonl') #Define Output Location!!!
 DELAY_SECONDS = 0.1 # To avoid any potential API limits
 urllib3.disable_warnings() # Avoids printing thousands of warnings about an unverified HTTPS request to host 'www.arcgis.com'
 
 # --- Connect to GIS ---
 def connect_to_portal():
-    gis = GIS("pro")
+    gis = GIS("pro") #Uses open ArcGIS Pro session for authentication — feel free to replace with your own method
     print(f"Connected to: {gis.properties.portalHostname} as {gis.users.me.username}")
     return gis
 
@@ -58,4 +57,5 @@ def dump_all_items_to_file(gis, output_path, delay=0.1):
 # --- MAIN ---
 if __name__ == "__main__":
     gis = connect_to_portal()
+
     dump_all_items_to_file(gis, OUTPUT_PATH, delay=DELAY_SECONDS)
